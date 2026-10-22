@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TPS-1937 PUF Panel Shed — Residential Fit-out</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#131a22; --panel-2:#182028; --border:#253140;
+    --accent:#ff6a2b; --accent-dim:#7a3a1e; --steel:#4f8fc0;
+    --text:#e7ecf2; --muted:#7d8ba0; --grid:#17222c;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;}
+  #app{display:flex;height:100vh;width:100vw;}
+  #sidebar{width:330px;min-width:330px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
+  #titleblock{padding:20px 20px 16px;border-bottom:1px solid var(--border);}
+  #titleblock h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:25px;letter-spacing:.02em;margin:6px 0 2px;text-transform:uppercase;line-height:1.05;}
+  #titleblock .sub{color:var(--muted);font-size:12.5px;line-height:1.5;}
+  .section{padding:16px 20px;border-bottom:1px solid var(--border);}
+  .section h2{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:600;}
+  .specrow{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);}
+  .specrow:last-child{border-bottom:none;}
+  .specrow .label{color:var(--muted);}
+  .specrow .val{font-family:'JetBrains Mono',monospace;color:var(--text);text-align:right;}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 0;color:var(--muted);}
+  .swatch{width:12px;height:12px;border-radius:2px;flex:none;border:1px solid rgba(255,255,255,.15);}
+  #viewbtns,#intbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .vbtn{background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:9px 6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;transition:border-color .15s, color .15s, background .15s;}
+  .vbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .vbtn.active{background:var(--accent);border-color:var(--accent);color:#1a0e08;}
+  .vbtn.int.active{background:var(--steel);border-color:var(--steel);color:#0a1620;}
+  #footNote{padding:14px 20px 20px;font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:auto;}
+  #viewport{flex:1;position:relative;}
+  canvas{display:block;width:100%;height:100%;}
+  #hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);background:rgba(13,17,23,.55);padding:6px 14px;border-radius:20px;border:1px solid var(--border);pointer-events:none;letter-spacing:.03em;}
+  #modeTag{position:absolute;top:18px;left:18px;font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(13,17,23,.55);}
+  #modeTag b{color:var(--accent);}
+  #modeTag.interior b{color:var(--steel);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <div id="titleblock">
+      <div class="eyebrow">Drawing No. TPS-1937 · Sh 1</div>
+      <h1>PUF Panel Shed — Residential Fit-out</h1>
+      <div class="sub">Drawn: Aman &nbsp;·&nbsp; Checked: Parvez &nbsp;·&nbsp; 17/10/2026<br>Overall envelope 6710 × 6100 mm</div>
+    </div>
+
+    <div class="section">
+      <h2>Panel Specification</h2>
+      <div class="specrow"><span class="label">Wall panel</span><span class="val">50mm, off-white both side</span></div>
+      <div class="specrow"><span class="label">Roof panel</span><span class="val">80mm (50+30), off-white</span></div>
+      <div class="specrow"><span class="label">Finish (site)</span><span class="val">Sky-blue PUF, white trim</span></div>
+      <div class="specrow"><span class="label">Door</span><span class="val">900 × 2100 mm (×2)</span></div>
+      <div class="specrow"><span class="label">Window</span><span class="val">1200 × 1200 mm</span></div>
+      <div class="specrow"><span class="label">Roof type</span><span class="val">Duo-pitch gable, ridge 3355mm</span></div>
+      <div class="specrow"><span class="label">Eave height</span><span class="val">2745 mm</span></div>
+    </div>
+
+    <div class="section">
+      <h2>Room Schedule</h2>
+      <div class="specrow"><span class="label">Hall</span><span class="val">Open plan, ~31 m²</span></div>
+      <div class="specrow"><span class="label">Bed corner</span><span class="val">open, back-left</span></div>
+      <div class="specrow"><span class="label">Bathroom</span><span class="val">10 × 10 ft (3050 × 3050)</span></div>
+    </div>
+
+    <div class="section">
+      <h2>Exterior Views</h2>
+      <div id="viewbtns">
+        <button class="vbtn" data-view="iso">Isometric</button>
+        <button class="vbtn" data-view="front">Front</button>
+        <button class="vbtn" data-view="back">Back</button>
+        <button class="vbtn" data-view="left">Left</button>
+        <button class="vbtn" data-view="right">Right</button>
+        <button class="vbtn" data-view="top">Top</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Interior Views</h2>
+      <div id="intbtns">
+        <button class="vbtn int" data-view="dollhouse">Dollhouse</button>
+        <button class="vbtn int" data-view="plan">Plan</button>
+        <button class="vbtn int" data-view="hall">Hall</button>
+        <button class="vbtn int" data-view="bedroom">Bedroom</button>
+        <button class="vbtn int" data-view="bathroom">Bathroom</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Legend</h2>
+      <div class="legend-item"><span class="swatch" style="background:#1c86c4"></span>PUF exterior wall (sky-blue)</div>
+      <div class="legend-item"><span class="swatch" style="background:#e3e6ea"></span>Hall flooring</div>
+      <div class="legend-item"><span class="swatch" style="background:#b9a98f"></span>Rug under bed</div>
+      <div class="legend-item"><span class="swatch" style="background:#dce8ee"></span>Bathroom flooring</div>
+      <div class="legend-item"><span class="swatch" style="background:#f4f6f8"></span>Doors (white)</div>
+    </div>
+
+    <div id="footNote">Built from Drawing TPS-1937 (Wall Panel Details W1–W31, Roof Panel &amp; Roof-Slope sheets) with the interior re-fitted to the client's furniture layout sketch: an open hall (couch under the window, round dining table, wall TV, TCM, almirah, rack, kitchen sink with 5 ft slab), the bed in the back-left corner with a long table at its head and a side table each side, and a closed 10×10 ft bathroom in the front-left corner (5×2.5 ft tub, 3×6 ft shower, western commode, basin). Doors are finished white per request. Furniture and fixtures are illustrative, sized to standard fittings — not part of the original structural drawing.</div>
+  </div>
+
+  <div id="viewport">
+    <div id="modeTag">Mode: <b id="modeLabel">Exterior</b></div>
+    <div id="hint">drag to orbit · scroll to zoom · pick a view at left</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const viewport = document.getElementById('viewport');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d1117);
+  scene.fog = new THREE.Fog(0x0d1117, 22, 55);
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  viewport.appendChild(renderer.domElement);
+  function resize(){ const w=viewport.clientWidth,h=viewport.clientHeight; camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h); }
+  window.addEventListener('resize', resize);
+
+  scene.add(new THREE.HemisphereLight(0x9fbcd6, 0x1a1510, 0.7));
+  const sun = new THREE.DirectionalLight(0xfff2df, 1.15);
+  sun.position.set(7,10,5); sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);
+  sun.shadow.camera.left=-9; sun.shadow.camera.right=9; sun.shadow.camera.top=9; sun.shadow.camera.bottom=-9; sun.shadow.camera.far=32; sun.shadow.bias=-0.0015;
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0x4f8fc0, 0.35); fill.position.set(-6,5,-5); scene.add(fill);
+  const roomLight = new THREE.PointLight(0xfff6e0, 0.55, 12); roomLight.position.set(0,2.6,0); scene.add(roomLight);
+  const roomLight2 = new THREE.PointLight(0xfff6e0, 0.4, 9); roomLight2.position.set(-1.6,2.3,1.9); scene.add(roomLight2);
+
+  function gridTexture(){
+    const c=document.createElement('canvas'); c.width=c.height=512;
+    const ctx=c.getContext('2d'); ctx.fillStyle='#12181f'; ctx.fillRect(0,0,512,512);
+    ctx.strokeStyle='rgba(79,143,192,0.22)'; ctx.lineWidth=1;
+    const step=512/16;
+    for(let i=0;i<=16;i++){ ctx.beginPath();ctx.moveTo(i*step,0);ctx.lineTo(i*step,512);ctx.stroke(); ctx.beginPath();ctx.moveTo(0,i*step);ctx.lineTo(512,i*step);ctx.stroke(); }
+    const tex=new THREE.CanvasTexture(c); tex.wrapS=tex.wrapT=THREE.RepeatWrapping; tex.repeat.set(6,6); return tex;
+  }
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(60,60), new THREE.MeshStandardMaterial({map:gridTexture(),roughness:1}));
+  ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+
+  // ================= Dimensions (meters) — from TPS-1937 panel schedule =================
+  const W = 6.10, L = 6.71;              // overall envelope: X=6100(gable span), Z=6710(ridge run)
+  const halfW = W/2, halfL = L/2;
+  const eaveH = 2.745;                   // flat eave wall height (W7-12, W19-24)
+  const ridgeH = 3.355;                  // gable ridge peak height (centre of W1-6 / W13-18)
+  const extThk = 0.07, intThk = 0.07;
+  const plinth = 0.12;
+  const doorW = 0.9, doorH = 2.1;
+
+  // Layout follows the client's hand sketch (20' x 22'): sketch top = back gable (window + door),
+  // sketch bottom = front gable (door), sketch right = +X.
+  // Closed 10' x 10' bathroom in the front-left corner; the rest is an open hall with the bed
+  // in the back-left corner (no partition around it).
+  const bathX0 = -halfW, bathX1 = bathX0 + 3.05;   // X: -3.05 .. 0.00  (10 ft)
+  const bathZ0 = -halfL,  bathZ1 = bathZ0 + 3.05;  // Z: -3.355 .. -0.305 (10 ft)
+
+  // Door / window X positions on the two gable walls — both doors on the right per sketch
+  // The sketch is a plan seen from above with the front wall at the bottom, so sketch-right = -X here
+  // (the interior group is mirrored on X below to achieve that). Both doors sit on the sketch's right.
+  const frontDoorX = -halfW + 0.3 + doorW/2;  // ~ -2.3 (same as the TPS-1937 drawing)
+  const backDoorX  = -halfW + 0.3 + doorW/2;  // ~ -2.3 (moved to the right side per sketch)
+  const windowX    = -0.58;                   // 4x4 ft window, right of centre in the sketch
+
+  // ================= Materials =================
+  const extWallMat = new THREE.MeshStandardMaterial({color:0x1c86c4, roughness:0.65, transparent:true, opacity:1});
+  const extWallMatDark = new THREE.MeshStandardMaterial({color:0x1878b0, roughness:0.65, transparent:true, opacity:1});
+  const trimMat = new THREE.MeshStandardMaterial({color:0xf2f4f6, roughness:0.45, metalness:0.15});
+  const roofMat = new THREE.MeshStandardMaterial({color:0xe9ebee, roughness:0.5, metalness:0.12});
+  const ridgeCapMat = new THREE.MeshStandardMaterial({color:0xd7dadf, roughness:0.45, metalness:0.2});
+  const intWallMat = new THREE.MeshStandardMaterial({color:0xf2f0e8, roughness:0.85});
+  const doorMat = new THREE.MeshStandardMaterial({color:0xf4f6f8, roughness:0.4});
+  const frostMat = new THREE.MeshStandardMaterial({color:0xdfeaf2, roughness:0.25, metalness:0.05, transparent:true, opacity:0.78, emissive:0x1a2a33, emissiveIntensity:0.08});
+  const chromeMat = new THREE.MeshStandardMaterial({color:0xd7dadd, roughness:0.2, metalness:0.75});
+  const darkWoodMat = new THREE.MeshStandardMaterial({color:0x5a3a24, roughness:0.55});
+  const screenMat = new THREE.MeshStandardMaterial({color:0x11151a, roughness:0.3, emissive:0x1a2430, emissiveIntensity:0.4});
+  const doorGlassMat = new THREE.MeshStandardMaterial({color:0x1a1d20, roughness:0.25, metalness:0.2});
+  const glassMat = new THREE.MeshStandardMaterial({color:0x9cc7e0, roughness:0.15, metalness:0.1, transparent:true, opacity:0.55, emissive:0x0d2233, emissiveIntensity:0.25});
+  const frameMat = new THREE.MeshStandardMaterial({color:0xf5f3ec, roughness:0.55});
+  const steelMat = new THREE.MeshStandardMaterial({color:0xb9bec3, roughness:0.35, metalness:0.6});
+  const woodMat = new THREE.MeshStandardMaterial({color:0x8a6142, roughness:0.65});
+  const fabricMat = new THREE.MeshStandardMaterial({color:0x4f6f8f, roughness:0.9});
+  const whiteFixtureMat = new THREE.MeshStandardMaterial({color:0xf5f6f7, roughness:0.35});
+  const darkMat = new THREE.MeshStandardMaterial({color:0x0c0f12, roughness:0.8});
+
+  const extGroup = new THREE.Group();  // exterior shell: walls + roof
+  const intGroup = new THREE.Group();  // partitions, floors, furniture, labels
+  intGroup.scale.x = -1;               // interior is authored in sketch coordinates; mirror X so the plan reads like the sketch seen from above
+  scene.add(extGroup, intGroup);
+
+  // ================= Helpers =================
+  function addFloor(x0,x1,z0,z1,color){
+    const m = new THREE.Mesh(new THREE.BoxGeometry(x1-x0, 0.04, z1-z0), new THREE.MeshStandardMaterial({color,roughness:0.75}));
+    m.position.set((x0+x1)/2, plinth-0.02, (z0+z1)/2);
+    m.receiveShadow = true;
+    intGroup.add(m);
+    return m;
+  }
+  function addWall(x0,z0,x1,z1,height,thk,gaps,mat){
+    gaps = gaps || [];
+    mat = mat || intWallMat;
+    const horizontal = Math.abs(x1-x0) > Math.abs(z1-z0);
+    const len = horizontal ? (x1-x0) : (z1-z0);
+    const dir = Math.sign(len) || 1;
+    const absLen = Math.abs(len);
+    let segs = [[0, absLen]];
+    gaps.forEach(g=>{
+      const gs = Math.min(g[0],g[1]), ge = Math.max(g[0],g[1]);
+      const next = [];
+      segs.forEach(s=>{
+        if(ge<=s[0] || gs>=s[1]) { next.push(s); return; }
+        if(gs>s[0]) next.push([s[0], gs]);
+        if(ge<s[1]) next.push([ge, s[1]]);
+      });
+      segs = next;
+    });
+    segs.forEach(s=>{
+      const segLen = s[1]-s[0];
+      if(segLen<=0.01) return;
+      let mesh;
+      if(horizontal){
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(segLen, height, thk), mat);
+        mesh.position.set(x0 + dir*(s[0]+segLen/2), plinth+height/2, z0);
+      } else {
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(thk, height, segLen), mat);
+        mesh.position.set(x0, plinth+height/2, z0 + dir*(s[0]+segLen/2));
+      }
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      intGroup.add(mesh);
+    });
+  }
+  function makeLabelSprite(text, color){
+    const c=document.createElement('canvas'); const fs=44; c.width=480; c.height=110;
+    const ctx=c.getContext('2d'); ctx.font=`600 ${fs}px 'JetBrains Mono', monospace`;
+    const tw=ctx.measureText(text).width; const boxW=Math.min(c.width, tw+30);
+    ctx.fillStyle='rgba(13,17,23,0.72)'; ctx.fillRect((c.width-boxW)/2, c.height/2-fs/2-8, boxW, fs+16);
+    ctx.strokeStyle=color; ctx.lineWidth=2; ctx.strokeRect((c.width-boxW)/2, c.height/2-fs/2-8, boxW, fs+16);
+    ctx.fillStyle='#eef2f6'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text, c.width/2, c.height/2);
+    const tex=new THREE.CanvasTexture(c);
+    const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false,transparent:true}));
+    spr.scale.set(1.5,0.34,1); spr.renderOrder=999;
+    return spr;
+  }
+  function addLabel(text,x,z,y,color){
+    const s = makeLabelSprite(text, color||'#ff6a2b');
+    s.position.set(x, y!=null?y:eaveH*0.62, z);
+    intGroup.add(s);
+  }
+
+  // ================= Furniture builders =================
+  function addBed(cx,cz,rotY){
+    const g = new THREE.Group();
+    const base = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.35,2.0), darkWoodMat); base.position.y=0.175; g.add(base);
+    const mattress = new THREE.Mesh(new THREE.BoxGeometry(1.42,0.18,1.92), new THREE.MeshStandardMaterial({color:0xf3f0e6,roughness:0.9})); mattress.position.y=0.44; g.add(mattress);
+    const headboard = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.7,0.08), darkWoodMat); headboard.position.set(0,0.7,-0.96); g.add(headboard);
+    const pillow1 = new THREE.Mesh(new THREE.BoxGeometry(0.55,0.1,0.35), new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.9})); pillow1.position.set(-0.35,0.58,-0.72); g.add(pillow1);
+    const pillow2 = pillow1.clone(); pillow2.position.x=0.35; g.add(pillow2);
+    const blanket = new THREE.Mesh(new THREE.BoxGeometry(1.42,0.05,1.1), fabricMat); blanket.position.set(0,0.56,0.35); g.add(blanket);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addSideTable(cx,cz){
+    const g = new THREE.Group();
+    const top = new THREE.Mesh(new THREE.BoxGeometry(0.45,0.03,0.4), woodMat); top.position.y=0.5; g.add(top);
+    const legGeo = new THREE.BoxGeometry(0.03,0.48,0.03);
+    [[-0.19,-0.17],[0.19,-0.17],[-0.19,0.17],[0.19,0.17]].forEach(p=>{ const leg=new THREE.Mesh(legGeo,woodMat); leg.position.set(p[0],0.24,p[1]); g.add(leg); });
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz);
+    intGroup.add(g);
+  }
+  function addCoffeeTable(cx,cz,rotY){
+    const g = new THREE.Group();
+    const top = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.03,1.1), woodMat); top.position.y=0.38; g.add(top);
+    const legGeo = new THREE.BoxGeometry(0.03,0.36,0.03);
+    [[-0.16,-0.5],[0.16,-0.5],[-0.16,0.5],[0.16,0.5]].forEach(p=>{ const leg=new THREE.Mesh(legGeo,woodMat); leg.position.set(p[0],0.18,p[1]); g.add(leg); });
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addCouch(cx,cz,rotY){
+    const g = new THREE.Group();
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(1.9,0.42,0.8), fabricMat); seat.position.set(0,0.22,0); g.add(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(1.9,0.46,0.18), fabricMat); back.position.set(0,0.46,-0.31); g.add(back);
+    const arm1 = new THREE.Mesh(new THREE.BoxGeometry(0.18,0.5,0.8), fabricMat); arm1.position.set(-1.0,0.25,0); g.add(arm1);
+    const arm2 = arm1.clone(); arm2.position.x=1.0; g.add(arm2);
+    for(let i=0;i<3;i++){ const cush=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.14,0.68), new THREE.MeshStandardMaterial({color:0x5c7c9c,roughness:0.9})); cush.position.set(-0.62+i*0.62,0.5,0.03); g.add(cush); }
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addRoundTableChairs(cx,cz,rotY){
+    const g = new THREE.Group();
+    const top = new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.04,24), woodMat); top.position.y=0.74; g.add(top);
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.08,0.7,12), steelMat); post.position.y=0.38; g.add(post);
+    const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.03,24), steelMat); baseRing.position.y=0.03; g.add(baseRing);
+    // three chairs around the table, each facing the table centre (backrest on the outer side)
+    [0.15*Math.PI, 0.85*Math.PI, 1.5*Math.PI].forEach(a=>{
+      const ch = new THREE.Group();
+      const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,0.06,16), fabricMat); seat.position.set(0,0.46,0); ch.add(seat);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.42,0.05), fabricMat); back.position.set(0,0.68,0.2); ch.add(back);
+      const legGeo = new THREE.CylinderGeometry(0.02,0.02,0.44,8);
+      [-0.15,0.15].forEach(dx=>{ [-0.15,0.15].forEach(dz=>{ const leg=new THREE.Mesh(legGeo,steelMat); leg.position.set(dx,0.22,dz); ch.add(leg); }); });
+      ch.position.set(0.85*Math.sin(a), 0, 0.85*Math.cos(a));
+      ch.rotation.y = a;
+      g.add(ch);
+    });
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addWallTV(cx,cz,wallSide){
+    const g = new THREE.Group();
+    const screen = new THREE.Mesh(new THREE.BoxGeometry(0.06,0.7,1.15), screenMat);
+    const mount = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.3,0.08), steelMat);
+    const off = wallSide==='right' ? -0.06 : 0.06;
+    screen.position.set(off,1.55,0); mount.position.set(off*1.6,1.55,0);
+    g.add(screen,mount);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;} });
+    g.position.set(cx,plinth,cz);
+    intGroup.add(g);
+  }
+  function addACUnit(cx,cz,y,axis){
+    const g = new THREE.Group();
+    const geo = axis==='z' ? new THREE.BoxGeometry(0.85,0.28,0.22) : new THREE.BoxGeometry(0.22,0.28,0.85);
+    const body = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:0xf4f6f8,roughness:0.35})); g.add(body);
+    const ventGeo = axis==='z' ? new THREE.BoxGeometry(0.75,0.04,0.02) : new THREE.BoxGeometry(0.02,0.04,0.75);
+    const vent = new THREE.Mesh(ventGeo, new THREE.MeshStandardMaterial({color:0xb7bcc0,roughness:0.5}));
+    vent.position.z = axis==='z' ? 0.115 : 0; vent.position.x = axis==='x' ? 0.115 : 0;
+    vent.position.y = -0.09;
+    g.add(vent);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;} });
+    g.position.set(cx,y,cz);
+    intGroup.add(g);
+  }
+  function addAlmirah(cx,cz,w,rotY){
+    const g = new THREE.Group();
+    const h=2.1,d=0.55;   // 7 ft tall per sketch
+    const body = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({color:0xcac4b4,roughness:0.5})); body.position.y=h/2; g.add(body);
+    const seam = new THREE.Mesh(new THREE.BoxGeometry(0.015,h-0.1,0.02), new THREE.MeshStandardMaterial({color:0x8a8478,roughness:0.5})); seam.position.set(0,h/2,d/2+0.01); g.add(seam);
+    [-w/4,w/4].forEach(hx=>{ const handle=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.18,8), chromeMat); handle.rotation.z=Math.PI/2; handle.position.set(hx,h/2,d/2+0.02); g.add(handle); });
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addRack(cx,cz,w,rotY){
+    const g = new THREE.Group();
+    const h=1.7,d=0.38;
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({color:0x9aa0a6,roughness:0.5,metalness:0.4}));
+    frame.position.set(0,h/2,0); g.add(frame);
+    for(let i=1;i<4;i++){ const shelf=new THREE.Mesh(new THREE.BoxGeometry(w-0.04,0.03,d-0.04), new THREE.MeshStandardMaterial({color:0xc7c2b4,roughness:0.6})); shelf.position.set(0,i*(h/4),0.0); g.add(shelf); }
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addTCM(cx,cz,w,rotY){
+    // TCM (telecom/equipment cabinet) — modelled the same as the open rack, per client note.
+    addRack(cx,cz,w,rotY);
+  }
+  function addBathTub(cx,cz,rotY){
+    const w=1.524, d=0.762, h=0.5; // 5 x 2.5 ft
+    const g = new THREE.Group();
+    const outer = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), whiteFixtureMat); outer.position.y=h/2; g.add(outer);
+    const basin = new THREE.Mesh(new THREE.BoxGeometry(w-0.1,h-0.1,d-0.1), new THREE.MeshStandardMaterial({color:0xeef3f6,roughness:0.25})); basin.position.y=h-0.02; g.add(basin);
+    const tap = new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.015,0.18,8), chromeMat); tap.position.set(-w/2+0.12,h+0.05,0); g.add(tap);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  // Shower area, w (X) x d (Z). Placed against the left wall: glass on the +X side and the +Z side,
+  // shower head + riser mounted on the left (-X) wall.
+  function addShowerStall(cx,cz,w,d){
+    const h=2.0;
+    const g = new THREE.Group();
+    const tray = new THREE.Mesh(new THREE.BoxGeometry(w,0.06,d), whiteFixtureMat); tray.position.y=0.03; g.add(tray);
+    const panelMat = new THREE.MeshStandardMaterial({color:0xcfe4ee, roughness:0.1, metalness:0.1, transparent:true, opacity:0.35});
+    const pSide = new THREE.Mesh(new THREE.BoxGeometry(0.02,h,d), panelMat); pSide.position.set(w/2,h/2,0); g.add(pSide);
+    const pEnd  = new THREE.Mesh(new THREE.BoxGeometry(w,h,0.02), panelMat); pEnd.position.set(0,h/2,d/2); g.add(pEnd);
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.01,0.01,0.3,8), chromeMat); handle.position.set(w/2+0.03,1.0,d/2-0.25); g.add(handle);
+    const head = new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.03,16), chromeMat); head.rotation.z=Math.PI/2; head.position.set(-w/2+0.12,1.95,0); g.add(head);
+    const riser = new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,1.7,8), chromeMat); riser.position.set(-w/2+0.03,1.1,0); g.add(riser);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz);
+    intGroup.add(g);
+  }
+  function addWC(cx,cz,rotY){
+    const g = new THREE.Group();
+    const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.19,0.15,0.38,16), whiteFixtureMat); bowl.position.set(0,0.19,0); g.add(bowl);
+    const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.2,0.03,16), new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.4})); seat.position.set(0,0.38,0); g.add(seat);
+    const tank = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.38,0.16), whiteFixtureMat); tank.position.set(0,0.55,-0.19); g.add(tank);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addBasin(cx,cz,rotY){
+    const g = new THREE.Group();
+    const basin = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.12,0.4), whiteFixtureMat); basin.position.set(0,0.8,0); g.add(basin);
+    const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.07,0.78,8), whiteFixtureMat); stand.position.set(0,0.4,0); g.add(stand);
+    const tap = new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.14,8), chromeMat); tap.position.set(0,0.9,-0.12); g.add(tap);
+    const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.5,0.02), new THREE.MeshStandardMaterial({color:0xaac4d4,roughness:0.1,metalness:0.3})); mirror.position.set(0,1.45,-0.19); g.add(mirror);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+  function addSinkSlab(cx,cz,len,rotY){
+    const g = new THREE.Group();
+    const counterH=0.85, counterD=0.5;
+    const counter = new THREE.Mesh(new THREE.BoxGeometry(len,counterH,counterD), new THREE.MeshStandardMaterial({color:0xd7d2c6,roughness:0.6})); counter.position.y=counterH/2; g.add(counter);
+    const top = new THREE.Mesh(new THREE.BoxGeometry(len,0.04,counterD+0.04), new THREE.MeshStandardMaterial({color:0x3a3f46,roughness:0.4})); top.position.y=counterH+0.02; g.add(top);
+    const sink = new THREE.Mesh(new THREE.BoxGeometry(0.4,0.02,0.3), new THREE.MeshStandardMaterial({color:0x9ea3a8,metalness:0.6,roughness:0.3})); sink.position.y=counterH+0.03; g.add(sink);
+    const tap = new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.22,8), chromeMat); tap.position.set(0,counterH+0.18,-counterD/2+0.06); g.add(tap);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    g.position.set(cx,plinth,cz); g.rotation.y=rotY||0;
+    intGroup.add(g);
+  }
+
+  // ================= Floors =================
+  // Hall (open plan, incl. bed corner): everything except the bathroom block
+  addFloor(bathX1, halfW, -halfL, halfL, 0xe3e6ea);         // east of the bathroom, full depth
+  addFloor(-halfW, bathX1, bathZ1, halfL, 0xe3e6ea);        // north of the bathroom (bed corner)
+  // Bathroom — tile flooring
+  addFloor(bathX0, bathX1, bathZ0, bathZ1, 0xdce8ee);
+  // Rug under the bed
+  (function(){
+    const rug = new THREE.Mesh(new THREE.BoxGeometry(2.7, 0.02, 2.3), new THREE.MeshStandardMaterial({color:0xb9a98f, roughness:1}));
+    rug.position.set(-1.65, plinth+0.01, 1.75);
+    rug.receiveShadow = true;
+    intGroup.add(rug);
+  })();
+
+  // ================= Partitions (bathroom only — the bed area is open) =================
+  // Door in the bathroom's top wall, hinged at the right (east) end, swinging into the bathroom
+  const bathDoorX1 = bathX1 - 0.07, bathDoorX0 = bathDoorX1 - doorW;
+  addWall(bathX0, bathZ1, bathX1, bathZ1, eaveH, intThk, [[bathDoorX0-bathX0, bathDoorX1-bathX0]]);
+  addWall(bathX1, bathZ0, bathX1, bathZ1, eaveH, intThk, []);
+
+  // Bathroom door leaf (white), hinge at the east end of the opening, open ~60 deg into the bathroom
+  (function(){
+    const hinge = new THREE.Group();
+    hinge.position.set(bathDoorX1, plinth, bathZ1);
+    const leaf = new THREE.Mesh(new THREE.BoxGeometry(doorW-0.04, doorH-0.04, 0.04), doorMat);
+    leaf.position.set(-(doorW-0.04)/2, (doorH-0.04)/2, 0);
+    leaf.castShadow = true;
+    hinge.add(leaf);
+    hinge.rotation.y = -Math.PI/3;
+    intGroup.add(hinge);
+  })();
+
+  // ================= Furniture — Hall (couch, dining table, TV, storage, kitchen sink) =================
+  // Couch under the back-wall window, facing the room
+  addCouch(0.55, halfL-0.55, Math.PI);
+  // Round dining table + chairs, centre of the hall
+  addRoundTableChairs(0.45, 0.9, 0);
+  // TV on the right wall
+  addWallTV(halfW-0.06, 1.7, 'right');
+  // TCM (modelled as rack) / almirah / rack stacked along the right wall, doors facing into the room
+  addTCM(halfW-0.3, -0.85, 0.6, -Math.PI/2);
+  addAlmirah(halfW-0.3, -1.45, 0.6, -Math.PI/2);
+  addRack(halfW-0.3, -2.2, 0.9, -Math.PI/2);
+  // Kitchen sink + 5 ft slab along the front wall, just east of the bathroom
+  addSinkSlab(bathX1+0.05+0.76, -halfL+0.3, 1.524, 0);
+
+  // ================= Furniture — Bed corner (back-left, open) =================
+  // Bed head toward the left wall, 5 ft wide
+  addBed(-1.62, 1.75, Math.PI/2);
+  // Long table along the left wall at the bed head (the sketch's "coffee table")
+  addCoffeeTable(-2.81, 1.75, 0);
+  // Side tables either side of the bed
+  addSideTable(-2.55, 2.95);
+  addSideTable(-2.55, 0.5);
+
+  // ================= Furniture — Bathroom (10 ft x 10 ft, front-left corner) =================
+  // 5 x 2.5 ft tub along the bathroom's top wall, tub runs along X
+  addBathTub(-2.15, bathZ1-0.42, 0);
+  // 3 x 6 ft shower along the left wall (X 3 ft wide, Z 6 ft long), from the front wall
+  addShowerStall(bathX0+0.04+0.46, bathZ0+0.04+0.92, 0.92, 1.83);
+  // WC and basin against the front wall
+  addWC(-1.6, bathZ0+0.34, 0);
+  addBasin(-0.65, bathZ0+0.33, 0);
+
+  // Room labels
+  addLabel('HALL', 1.5, 0.1, eaveH*0.75, '#ff6a2b');
+  addLabel('BEDROOM', -1.65, 1.75, eaveH*0.9, '#4f8fc0');
+  addLabel('BATHROOM', -1.2, -1.7, eaveH*0.9, '#4f8fc0');
+
+  // ================= Exterior shell =================
+  function extWallBox(cx,cz,w,d,h,y,mat){
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat||extWallMat);
+    m.position.set(cx, (y||0)+h/2, cz);
+    m.castShadow=true; m.receiveShadow=true;
+    extGroup.add(m);
+    return m;
+  }
+  // Eave (long) walls — flat 2745mm, run along Z at X=+-halfW
+  extWallBox(-halfW, 0, extThk, L, eaveH, plinth, extWallMatDark);
+  extWallBox( halfW, 0, extThk, L, eaveH, plinth, extWallMatDark);
+
+  // Everything on/above the two gable ends (walls, doors, windows, canopies, vents, roof) hides
+  // together in interior mode, like lifting off that end of the shed to look inside.
+  const gableFacade = new THREE.Group();
+  gableFacade.userData.isRoofOrGable = true;
+  extGroup.add(gableFacade);
+
+  // Gable end walls — trapezoidal profile rising to ridge peak at centre X=0
+  function gableWallMesh(z, mat){
+    const shape = new THREE.Shape();
+    shape.moveTo(-halfW, 0);
+    shape.lineTo(-halfW, eaveH);
+    shape.lineTo(0, ridgeH);
+    shape.lineTo(halfW, eaveH);
+    shape.lineTo(halfW, 0);
+    shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape, {depth:extThk, bevelEnabled:false});
+    geo.translate(0,0,-extThk/2);
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(0, plinth, z);
+    mesh.castShadow=true; mesh.receiveShadow=true;
+    gableFacade.add(mesh);
+    return mesh;
+  }
+  gableWallMesh(-halfL, extWallMat);  // front gable (door only)
+  gableWallMesh( halfL, extWallMat);  // back gable (window + door)
+
+  // door/window openings — dark recess + overlay technique, axis 'x' = wall runs along X, 'z' = wall runs along Z
+  function opening(cx,cz,w,h,yBase,axis){
+    const geo = axis==='x' ? new THREE.BoxGeometry(w,h,extThk+0.03) : new THREE.BoxGeometry(extThk+0.03,h,w);
+    const rec = new THREE.Mesh(geo, darkMat);
+    rec.position.set(cx, yBase+h/2+plinth, cz);
+    gableFacade.add(rec);
+    return rec;
+  }
+  function windowPane(cx,cz,w,h,yBase,axis,outSign){
+    opening(cx,cz,w,h,yBase,axis);
+    // push pane + trim clear of the recess's outer face (half-depth 0.05) so they don't z-fight with it
+    outSign = outSign || 1;
+    const off = 0.08 * outSign;
+    const ocx = axis==='x' ? cx : cx+off;
+    const ocz = axis==='x' ? cz+off : cz;
+    const oy = yBase+h/2+plinth;
+    // glass fills most of the opening
+    const geo = axis==='x' ? new THREE.BoxGeometry(w-0.08,h-0.08,0.02) : new THREE.BoxGeometry(0.02,h-0.08,w-0.08);
+    const pane = new THREE.Mesh(geo, glassMat);
+    pane.position.set(ocx, oy, ocz);
+    gableFacade.add(pane);
+    // thin picture-frame trim around the edge (4 strips) so it borders the glass instead of covering it
+    const fw = 0.05, ft = 0.03;
+    const mkStrip = (sw,sh)=>{
+      const sg = axis==='x' ? new THREE.BoxGeometry(sw,sh,ft) : new THREE.BoxGeometry(ft,sh,sw);
+      return new THREE.Mesh(sg, frameMat);
+    };
+    [-1,1].forEach(s=>{
+      const top = mkStrip(w, fw);
+      if(axis==='x') top.position.set(ocx, oy+s*(h/2-fw/2), ocz); else top.position.set(ocx, oy+s*(h/2-fw/2), ocz);
+      gableFacade.add(top);
+      const side = mkStrip(fw, h-fw*2);
+      if(axis==='x') side.position.set(ocx+s*(w/2-fw/2), oy, ocz); else side.position.set(ocx, oy, ocz+s*(w/2-fw/2));
+      gableFacade.add(side);
+    });
+  }
+  function doorCanopy(cx,cz,facing){
+    // facing: +1 or -1, direction canopy projects along Z
+    const g = new THREE.Group();
+    const cw=1.3, cd=0.62, tilt=0.22;
+    const underside = new THREE.Mesh(new THREE.BoxGeometry(cw,0.04,cd), trimMat);
+    underside.rotation.x = -tilt*facing;
+    underside.position.set(0, doorH+0.18+Math.sin(tilt)*cd*0.25, facing*cd*0.42);
+    g.add(underside);
+    const top = underside.clone(); top.position.y += 0.05; g.add(top);
+    const drip = new THREE.Mesh(new THREE.BoxGeometry(cw,0.06,0.04), trimMat);
+    drip.position.set(0, doorH+0.18+Math.sin(tilt)*cd*0.8+0.03, facing*cd*0.8);
+    g.add(drip);
+    [-cw/2+0.05, cw/2-0.05].forEach(ex=>{
+      const endcap = new THREE.Mesh(new THREE.BoxGeometry(0.03,0.1,cd), trimMat);
+      endcap.rotation.x = -tilt*facing;
+      endcap.position.set(ex, doorH+0.18+Math.sin(tilt)*cd*0.25, facing*cd*0.42);
+      g.add(endcap);
+    });
+    const brktGeo = new THREE.BoxGeometry(0.03,0.28,0.03);
+    [-0.45,0.45].forEach(bx=>{
+      const b = new THREE.Mesh(brktGeo, steelMat);
+      b.rotation.x = -0.75*facing;
+      b.position.set(bx, doorH+0.05, facing*0.18);
+      g.add(b);
+    });
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;} });
+    g.position.set(cx, plinth, cz);
+    gableFacade.add(g);
+  }
+  function ventLouvre(cx,cz,w,h,yBase,axis){
+    const g = new THREE.Group();
+    const shadow = new THREE.Mesh(axis==='x'?new THREE.BoxGeometry(w,h,0.05):new THREE.BoxGeometry(0.05,h,w), darkMat);
+    g.add(shadow);
+    const fr = new THREE.Mesh(axis==='x'?new THREE.BoxGeometry(w+0.05,h+0.05,0.03):new THREE.BoxGeometry(0.03,h+0.05,w+0.05), frameMat);
+    fr.position.z = axis==='x' ? 0.015 : 0; fr.position.x = axis==='z' ? 0.015 : 0;
+    g.add(fr);
+    const slats=6;
+    for(let i=0;i<slats;i++){
+      const sy = -h/2 + (i+0.5)*(h/slats);
+      const slat = new THREE.Mesh(axis==='x'?new THREE.BoxGeometry(w-0.08,h/slats*0.7,0.03):new THREE.BoxGeometry(0.03,h/slats*0.7,w-0.08), frameMat);
+      slat.rotation.x = axis==='x' ? 0.5 : 0; slat.rotation.z = axis==='z' ? 0.5 : 0;
+      slat.position.y = sy;
+      g.add(slat);
+    }
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;} });
+    g.position.set(cx, yBase+h/2+plinth, cz);
+    gableFacade.add(g);
+  }
+
+  // Front gable wall (Z=-halfL): door near left corner
+  opening(frontDoorX, -halfL, doorW, doorH, 0, 'x');
+  const frontDoor = new THREE.Mesh(new THREE.BoxGeometry(doorW-0.04,doorH-0.04,0.05), doorMat);
+  frontDoor.position.set(frontDoorX, plinth+(doorH-0.04)/2, -halfL-0.04);
+  gableFacade.add(frontDoor);
+  [[-0.2,0.55],[0.2,0.55],[-0.2,1.55],[0.2,1.55]].forEach(p=>{
+    const vp = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.55,0.02), doorGlassMat);
+    vp.position.set(frontDoorX+p[0], plinth+p[1], -halfL-0.075);
+    gableFacade.add(vp);
+  });
+  doorCanopy(frontDoorX, -halfL, -1);
+  ventLouvre(frontDoorX+1.3, -halfL, 0.45, 0.45, 2.1, 'x');
+
+  // Back gable wall (Z=+halfL): window (office) near centre-left, door near right corner
+  windowPane(windowX, halfL, 1.2, 1.2, 1.1, 'x', 1);
+  opening(backDoorX, halfL, doorW, doorH, 0, 'x');
+  const backDoor = new THREE.Mesh(new THREE.BoxGeometry(doorW-0.04,doorH-0.04,0.05), doorMat);
+  backDoor.position.set(backDoorX, plinth+(doorH-0.04)/2, halfL+0.04);
+  gableFacade.add(backDoor);
+  [[-0.2,0.55],[0.2,0.55],[-0.2,1.55],[0.2,1.55]].forEach(p=>{
+    const vp = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.55,0.02), doorGlassMat);
+    vp.position.set(backDoorX+p[0], plinth+p[1], halfL+0.075);
+    gableFacade.add(vp);
+  });
+  doorCanopy(backDoorX, halfL, 1);
+  ventLouvre(1.6, halfL, 0.45, 0.45, 2.1, 'x');
+
+  // ================= Roof (duo-pitch gable, ridge along Z at X=0) =================
+  const roofOverhangZ = 0.3, roofOverhangX = 0.45;
+  const slopeRun = halfW + roofOverhangX;
+  const slopeDrop = ridgeH - eaveH;
+  const slopeLen = Math.sqrt(slopeRun*slopeRun + slopeDrop*slopeDrop);
+  const slopeAngle = Math.atan2(slopeDrop, slopeRun);
+  const roofLen = L + roofOverhangZ*2;
+
+  function roofSlope(sign){
+    const g = new THREE.Group();
+    const skin = new THREE.Mesh(new THREE.BoxGeometry(slopeLen, 0.08, roofLen), roofMat);
+    g.add(skin);
+    for(let i=1;i<10;i++){
+      const rx = -slopeLen/2 + i*(slopeLen/10);
+      const ridge = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.02, roofLen), ridgeCapMat);
+      ridge.position.set(rx, 0.05, 0);
+      g.add(ridge);
+    }
+    const fasciaLow = new THREE.Mesh(new THREE.BoxGeometry(0.06,0.16,roofLen), trimMat);
+    fasciaLow.position.set(slopeLen/2+0.02, -0.02, 0);
+    g.add(fasciaLow);
+    g.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} });
+    // position & rotate: pivot at ridge line (top-inner edge)
+    g.rotation.z = -sign*slopeAngle;
+    // box pivot is its centre; offset so its inner (ridge-side) edge sits exactly at the ridge line
+    g.position.set(sign*(slopeLen/2)*Math.cos(slopeAngle), ridgeH+plinth-(slopeLen/2)*Math.sin(slopeAngle), 0);
+    gableFacade.add(g);
+  }
+  roofSlope(-1);
+  roofSlope(1);
+  // ridge cap
+  const ridgeCap = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.1,roofLen), ridgeCapMat);
+  ridgeCap.position.set(0, ridgeH+plinth+0.05, 0);
+  ridgeCap.castShadow=true;
+  gableFacade.add(ridgeCap);
+  // gable-end fascia trim (follows the triangular profile)
+  function gableFascia(z, dir){
+    const shape = new THREE.Shape();
+    const t=0.05;
+    shape.moveTo(-halfW-roofOverhangX, eaveH-t); shape.lineTo(-halfW-roofOverhangX, eaveH+t);
+    shape.lineTo(0, ridgeH+t); shape.lineTo(halfW+roofOverhangX, eaveH+t);
+    shape.lineTo(halfW+roofOverhangX, eaveH-t); shape.lineTo(0, ridgeH-t);
+    shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape, {depth:0.05, bevelEnabled:false});
+    geo.translate(0,0,-0.025);
+    const mesh = new THREE.Mesh(geo, trimMat);
+    mesh.position.set(0, plinth, z);
+    mesh.castShadow=true;
+    gableFacade.add(mesh);
+  }
+  gableFascia(-halfL-0.02, -1);
+  gableFascia(halfL+0.02, 1);
+
+  // Plinth / RCC platform under whole shed
+  const platform = new THREE.Mesh(new THREE.BoxGeometry(W+0.3, plinth, L+0.3), new THREE.MeshStandardMaterial({color:0xc9cbce,roughness:0.7}));
+  platform.position.set(0, plinth/2, 0);
+  platform.receiveShadow = true;
+  scene.add(platform);
+  // simple entrance steps at both doors
+  function steps(cx,cz,dir){
+    for(let i=0;i<2;i++){
+      const s = new THREE.Mesh(new THREE.BoxGeometry(1.2,0.1,0.28), new THREE.MeshStandardMaterial({color:0xb9bbbe,roughness:0.7}));
+      s.position.set(cx, plinth-0.1*(i+1)+0.05, cz+dir*(0.25+0.28*i));
+      s.receiveShadow=true; s.castShadow=true;
+      scene.add(s);
+    }
+  }
+  steps(frontDoorX, -halfL, -1);
+  steps(backDoorX, halfL, 1);
+
+  // ================= Camera + orbit =================
+  const target = new THREE.Vector3(0, eaveH*0.5, 0);
+  let theta=Math.PI*0.28, phi=Math.PI*0.34, radius=11;
+  let tTheta=theta, tPhi=phi, tRadius=radius, tTarget=target.clone();
+  const curTarget = target.clone();
+
+  function updateCamera(){
+    theta += (tTheta-theta)*0.09; phi += (tPhi-phi)*0.09; radius += (tRadius-radius)*0.09;
+    curTarget.lerp(tTarget, 0.09);
+    camera.position.set(
+      curTarget.x + radius*Math.sin(phi)*Math.sin(theta),
+      curTarget.y + radius*Math.cos(phi),
+      curTarget.z + radius*Math.sin(phi)*Math.cos(theta)
+    );
+    camera.lookAt(curTarget);
+  }
+  let dragging=false,lastX=0,lastY=0;
+  const dom = renderer.domElement; dom.style.cursor='grab';
+  dom.addEventListener('pointerdown', e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;dom.style.cursor='grabbing';});
+  window.addEventListener('pointerup', ()=>{dragging=false;dom.style.cursor='grab';});
+  window.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    const dx=e.clientX-lastX, dy=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY;
+    tTheta -= dx*0.0055; tPhi -= dy*0.0055;
+    tPhi = Math.max(0.08, Math.min(Math.PI/2-0.02, tPhi));
+  });
+  dom.addEventListener('wheel', e=>{ e.preventDefault(); tRadius += e.deltaY*0.0035*tRadius*0.4; tRadius=Math.max(1.2,Math.min(30,tRadius)); }, {passive:false});
+  let pinchDist=null;
+  dom.addEventListener('touchstart', e=>{
+    if(e.touches.length===1){dragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;}
+    else if(e.touches.length===2){pinchDist=dist2(e.touches);}
+  });
+  dom.addEventListener('touchmove', e=>{
+    e.preventDefault();
+    if(e.touches.length===1 && dragging){
+      const dx=e.touches[0].clientX-lastX, dy=e.touches[0].clientY-lastY; lastX=e.touches[0].clientX; lastY=e.touches[0].clientY;
+      tTheta -= dx*0.006; tPhi -= dy*0.006; tPhi=Math.max(0.08,Math.min(Math.PI/2-0.02,tPhi));
+    } else if(e.touches.length===2){
+      const d=dist2(e.touches); tRadius += (pinchDist-d)*0.01; tRadius=Math.max(1.2,Math.min(30,tRadius)); pinchDist=d;
+    }
+  }, {passive:false});
+  dom.addEventListener('touchend', ()=>{dragging=false;pinchDist=null;});
+  function dist2(t){const dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.sqrt(dx*dx+dy*dy);}
+
+  // ================= View presets =================
+  const views = {
+    iso:   {mode:'ext', theta:Math.PI*0.28, phi:Math.PI*0.34, radius:17,  tx:0, ty:eaveH*0.55, tz:0},
+    front: {mode:'ext', theta:Math.PI*1.0,  phi:Math.PI*0.42, radius:15,  tx:0, ty:eaveH*0.5,  tz:0},
+    back:  {mode:'ext', theta:Math.PI*0.0,  phi:Math.PI*0.42, radius:15,  tx:0, ty:eaveH*0.5,  tz:0},
+    left:  {mode:'ext', theta:Math.PI*0.5,  phi:Math.PI*0.42, radius:16,  tx:0, ty:eaveH*0.5,  tz:0},
+    right: {mode:'ext', theta:Math.PI*1.5,  phi:Math.PI*0.42, radius:16,  tx:0, ty:eaveH*0.5,  tz:0},
+    top:   {mode:'ext', theta:Math.PI*0.28, phi:0.12,          radius:20, tx:0, ty:0, tz:0},
+    dollhouse: {mode:'int', theta:Math.PI*0.28, phi:Math.PI*0.32, radius:14,  tx:0,    ty:1.1,  tz:0},
+    hall:      {mode:'int', theta:Math.PI*0.30, phi:Math.PI*0.27, radius:8.5, tx:-1.2,  ty:0.8, tz:0.2},
+    bedroom:   {mode:'int', theta:Math.PI*1.65, phi:Math.PI*0.30, radius:5.2, tx:1.6,   ty:0.5, tz:1.7},
+    bathroom:  {mode:'int', theta:Math.PI*0.85, phi:Math.PI*0.20, radius:6.2, tx:1.5,  ty:0.4, tz:-1.8},
+    plan:      {mode:'int', theta:Math.PI*1.0,  phi:0.03, radius:11, tx:0, ty:0.3, tz:0},
+  };
+  function setMode(mode){
+    const interior = mode==='int';
+    extWallMat.opacity = interior ? 0.16 : 1;
+    extWallMatDark.opacity = interior ? 0.16 : 1;
+    document.getElementById('modeLabel').textContent = interior ? 'Interior' : 'Exterior';
+    document.getElementById('modeTag').classList.toggle('interior', interior);
+  }
+  // roof + both gable-end walls (door/window/canopy/vent/roof) hide together in interior mode;
+  // eave side walls stay but fade via opacity above
+  function setView(name){
+    const v = views[name];
+    tTheta=v.theta; tPhi=v.phi; tRadius=v.radius; tTarget.set(v.tx,v.ty,v.tz);
+    setMode(v.mode);
+    const interior = v.mode==='int';
+    extGroup.traverse(o=>{
+      if(o.userData.isRoofOrGable){ o.visible = !interior; }
+    });
+    document.querySelectorAll('.vbtn').forEach(b=>b.classList.toggle('active', b.dataset.view===name));
+  }
+  document.querySelectorAll('.vbtn').forEach(b=> b.addEventListener('click', ()=> setView(b.dataset.view)));
+  setView('iso');
+
+  resize();
+  function animate(){ requestAnimationFrame(animate); updateCamera(); renderer.render(scene,camera); }
+  animate();
+})();
+</script>
+</body>
+</html>
